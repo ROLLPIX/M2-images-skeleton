@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Rollpix. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="rollpix" translate="label" sortOrder="400">
+            <label>Rollpix</label>
+        </tab>
+
+        <section id="rollpix_skeleton" translate="label" type="text" sortOrder="10"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Skeleton Preloader</label>
+            <tab>rollpix</tab>
+            <resource>Magento_Config::config</resource>
+
+            <!-- ==================== General Settings ==================== -->
+            <group id="general" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="pages" translate="label comment" type="multiselect" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pages</label>
+                    <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Pages</source_model>
+                    <comment>Select the page types where skeleton preloaders should be active.</comment>
+                </field>
+
+                <field id="fade_out_duration" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fade Out Duration (ms)</label>
+                    <validate>validate-digits</validate>
+                    <comment>Duration of the fade-out animation in milliseconds when revealing content.</comment>
+                </field>
+
+                <field id="skeleton_timeout" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Skeleton Timeout (ms)</label>
+                    <validate>validate-digits</validate>
+                    <comment>Maximum time the skeleton is displayed before being removed as a safety fallback (ms).</comment>
+                </field>
+            </group>
+
+            <!-- ==================== Presets ==================== -->
+            <group id="presets" translate="label" type="text" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Preset Target Elements</label>
+
+                <!-- Mageplaza Banner Slider -->
+                <group id="mageplaza_banner" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mageplaza Banner Slider</label>
+                    <comment><![CDATA[CSS Selector: <strong>.mageplaza-bannerslider</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element. Change only if your theme uses a different selector.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 450px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 16:9, 3:1). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+
+                <!-- Product Images (Listing) -->
+                <group id="product_images_listing" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Images (Listing)</label>
+                    <comment><![CDATA[CSS Selector: <strong>.product-image-container</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 300px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 1:1, 4:3). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+
+                <!-- Product Image (PDP) -->
+                <group id="product_image_pdp" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Image (PDP Gallery)</label>
+                    <comment><![CDATA[CSS Selector: <strong>.gallery-placeholder</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 500px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 1:1, 4:3). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+
+                <!-- Category Image -->
+                <group id="category_image" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category Image</label>
+                    <comment><![CDATA[CSS Selector: <strong>.category-image</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 200px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 16:9, 3:1). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+
+                <!-- CMS Block Images -->
+                <group id="cms_block_images" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CMS Block Images</label>
+                    <comment><![CDATA[CSS Selector: <strong>.widget img, .block-static-block img</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 200px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 16:9, 3:1). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+
+                <!-- Page Builder Images -->
+                <group id="pagebuilder_images" translate="label comment" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Page Builder Images</label>
+                    <comment><![CDATA[CSS Selector: <strong>.pagebuilder-banner-wrapper, .pagebuilder-slide-wrapper</strong>]]></comment>
+
+                    <field id="enabled" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="selector" translate="label comment" type="text" sortOrder="20"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>CSS Selector</label>
+                        <comment>The CSS selector used to target this element.</comment>
+                    </field>
+                    <field id="effect" translate="label" type="select" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Effect</label>
+                        <source_model>Rollpix\SkeletonPreloader\Model\Config\Source\Effects</source_model>
+                    </field>
+                    <field id="height" translate="label comment" type="text" sortOrder="40"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reserved Height</label>
+                        <comment>Height in px (e.g. 400px) or 'auto' to not reserve height.</comment>
+                    </field>
+                    <field id="aspect_ratio" translate="label comment" type="text" sortOrder="50"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Aspect Ratio</label>
+                        <comment>Aspect ratio (e.g. 16:9, 3:1). If defined, overrides height.</comment>
+                    </field>
+                    <field id="border_radius" translate="label comment" type="text" sortOrder="60"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Border Radius (px)</label>
+                        <comment>Border radius in pixels.</comment>
+                    </field>
+                    <field id="bg_color" translate="label comment" type="text" sortOrder="70"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <comment>Hex color for the skeleton base (e.g. #e0e0e0).</comment>
+                    </field>
+                    <field id="hl_color" translate="label comment" type="text" sortOrder="80"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Highlight Color</label>
+                        <comment>Hex color for the skeleton highlight (e.g. #f5f5f5).</comment>
+                    </field>
+                    <field id="animation_speed" translate="label comment" type="text" sortOrder="90"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Animation Speed (ms)</label>
+                        <validate>validate-digits</validate>
+                        <comment>Animation speed in milliseconds.</comment>
+                    </field>
+                </group>
+            </group>
+
+            <!-- ==================== Custom Selectors ==================== -->
+            <group id="custom" translate="label" type="text" sortOrder="30"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Custom Selectors</label>
+
+                <field id="selectors" translate="label comment" type="textarea" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom Selectors (JSON)</label>
+                    <comment><![CDATA[
+JSON array of custom selector configurations. Each object supports these fields:<br/>
+<strong>label</strong> (string) — A descriptive name for this target.<br/>
+<strong>selector</strong> (string, required) — CSS selector of the element to overlay.<br/>
+<strong>effect</strong> (string) — shimmer | pulse | wave | static. Default: shimmer.<br/>
+<strong>height</strong> (string) — Height in px (e.g. "300px") or "auto". Default: auto.<br/>
+<strong>aspect_ratio</strong> (string) — e.g. "16:9". If set, overrides height.<br/>
+<strong>border_radius</strong> (string) — In pixels. Default: 0.<br/>
+<strong>bg_color</strong> (string) — Hex background color. Default: #e0e0e0.<br/>
+<strong>hl_color</strong> (string) — Hex highlight color. Default: #f5f5f5.<br/>
+<strong>animation_speed</strong> (string) — In milliseconds. Default: 1500.<br/>
+<strong>pages</strong> (string) — Comma-separated page types: home,category,product,cms,all.<br/><br/>
+<strong>Example:</strong><br/>
+<code>[{"label":"My Custom Slider","selector":".my-slider","effect":"shimmer","height":"300px","aspect_ratio":"","border_radius":"0","bg_color":"#e0e0e0","hl_color":"#f5f5f5","animation_speed":"1500","pages":"home,category"}]</code>
+                    ]]></comment>
+                </field>
+            </group>
+
+        </section>
+    </system>
+</config>

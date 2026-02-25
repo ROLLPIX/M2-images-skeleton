@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Rollpix. All rights reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Rollpix_SkeletonPreloader::css/skeleton-preloader.css"/>
+    </head>
+    <body>
+        <!-- Critical CSS inline in head -->
+        <referenceContainer name="head.additional">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="rollpix.skeleton.critical.css"
+                   template="Rollpix_SkeletonPreloader::skeleton-critical-css.phtml">
+                <arguments>
+                    <argument name="skeleton_config" xsi:type="object">Rollpix\SkeletonPreloader\ViewModel\SkeletonConfig</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <!-- JS init at end of body -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="rollpix.skeleton.init"
+                   template="Rollpix_SkeletonPreloader::skeleton-init.phtml">
+                <arguments>
+                    <argument name="skeleton_config" xsi:type="object">Rollpix\SkeletonPreloader\ViewModel\SkeletonConfig</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

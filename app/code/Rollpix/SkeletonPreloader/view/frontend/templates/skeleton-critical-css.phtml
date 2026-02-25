@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Rollpix. All rights reserved.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Rollpix\SkeletonPreloader\ViewModel\SkeletonConfig $config
+ */
+$config = $block->getData('skeleton_config');
+if (!$config->isEnabled()) {
+    return;
+}
+$criticalCss = $config->getCriticalCss();
+if (empty($criticalCss)) {
+    return;
+}
+?>
+<style id="rp-skeleton-critical"><?= /* @noEscape */ $criticalCss ?></style>

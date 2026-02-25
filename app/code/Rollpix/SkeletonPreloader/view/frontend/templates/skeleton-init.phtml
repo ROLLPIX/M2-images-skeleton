@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Rollpix. All rights reserved.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Rollpix\SkeletonPreloader\ViewModel\SkeletonConfig $config
+ */
+$config = $block->getData('skeleton_config');
+if (!$config->isEnabled()) {
+    return;
+}
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Rollpix_SkeletonPreloader/js/skeleton-preloader": <?= /* @noEscape */ $config->getJsConfigJson() ?>
+    }
+}
+</script>

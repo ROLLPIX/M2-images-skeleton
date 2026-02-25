@@ -1,0 +1,21 @@
+/**
+ * Rollpix_SkeletonPreloader - Base styles
+ * Critical styles are injected inline in <head> via phtml template.
+ */
+
+/* Ensure skeleton elements have positioning context */
+.rp-skeleton-active {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Prevent pointer events on the overlay */
+.rp-skeleton-active::before {
+    pointer-events: none;
+}
+
+/* When loaded, transition min-height back to auto */
+.rp-skeleton-loaded {
+    min-height: auto !important;
+    transition: min-height 0.3s ease;
+}
