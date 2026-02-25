@@ -11,7 +11,9 @@ define(['jquery'], function ($) {
             return;
         }
 
+        var MIN_SIZE = 50; // Minimum px in both dimensions to apply skeleton
         var SLIDER_KEYWORDS = ['slider', 'carousel', 'owl', 'banner', 'swiper', 'slick', 'pagebuilder'];
+        var SLIDER_CLASSES = ['owl-loaded', 'slick-initialized', 'swiper-initialized'];
 
         function getDetectionType(selector) {
             var lower = selector.toLowerCase();
@@ -20,42 +22,53 @@ define(['jquery'], function ($) {
                     return 'mutation';
                 }
             }
-            if (lower.indexOf('img') !== -1) {
-                return 'imgload';
+            return 'imgload';
+        }
+
+        function isSliderInitialized(el) {
+            // Check the element itself AND its descendants for slider init classes
+            var $el = $(el);
+            for (var i = 0; i < SLIDER_CLASSES.length; i++) {
+                if ($el.hasClass(SLIDER_CLASSES[i]) || $el.find('.' + SLIDER_CLASSES[i]).length > 0) {
+                    return true;
+                }
             }
-            return 'hybrid';
+            return false;
+        }
+
+        function areImagesLoaded(el) {
+            var images = el.querySelectorAll('img');
+            if (images.length === 0) {
+                return false;
+            }
+            var allLoaded = true;
+            images.forEach(function (img) {
+                if (!img.complete || img.naturalWidth === 0) {
+                    allLoaded = false;
+                }
+            });
+            return allLoaded;
         }
 
         function isElementLoaded(el) {
-            var $el = $(el);
+            return isSliderInitialized(el) || areImagesLoaded(el);
+        }
 
-            if ($el.hasClass('owl-loaded') ||
-                $el.hasClass('slick-initialized') ||
-                $el.hasClass('swiper-initialized')) {
-                return true;
-            }
+        function isTooSmall(el) {
+            var rect = el.getBoundingClientRect();
+            return rect.width < MIN_SIZE || rect.height < MIN_SIZE;
+        }
 
-            var images = el.querySelectorAll('img');
-
-            if (images.length > 0) {
-                var allLoaded = true;
-
-                images.forEach(function (img) {
-                    if (!img.complete || img.naturalWidth === 0) {
-                        allLoaded = false;
-                    }
-                });
-
-                return allLoaded;
-            }
-
-            return false;
+        function isVoidElement(el) {
+            // ::before does not work on replaced/void elements
+            var tag = el.tagName.toLowerCase();
+            return tag === 'img' || tag === 'input' || tag === 'br' || tag === 'hr' ||
+                   tag === 'embed' || tag === 'source' || tag === 'track' || tag === 'area';
         }
 
         function revealElement(el, fadeOutDuration) {
             var $el = $(el);
-
-            if ($el.hasClass('rp-skeleton-loaded')) {
+            if ($el.hasClass('rp-skeleton-loaded') || !$el.hasClass('rp-skeleton-active')) {
                 return;
             }
 
@@ -88,6 +101,7 @@ define(['jquery'], function ($) {
             var images = el.querySelectorAll('img');
 
             if (images.length === 0) {
+                // No images yet — watch for them to appear via mutation
                 return observeMutation(el, fadeOutDuration);
             }
 
@@ -99,7 +113,6 @@ define(['jquery'], function ($) {
                 } else {
                     $(img).one('load error', function () {
                         pending--;
-
                         if (pending <= 0) {
                             revealElement(el, fadeOutDuration);
                         }
@@ -125,30 +138,39 @@ define(['jquery'], function ($) {
             var detectionType = getDetectionType(target.selector);
 
             elements.forEach(function (el) {
+                // Skip void/replaced elements (::before doesn't work on <img>, etc.)
+                if (isVoidElement(el)) {
+                    return;
+                }
+
+                // Skip elements that are too small (icons, thumbnails, etc.)
+                if (isTooSmall(el)) {
+                    return;
+                }
+
+                // Skip if already loaded
                 if (isElementLoaded(el)) {
                     return;
                 }
 
+                // Activate skeleton
                 el.classList.add('rp-skeleton-active');
 
                 var observer = null;
 
                 if (detectionType === 'mutation') {
                     observer = observeMutation(el, config.fadeOutDuration);
-                } else if (detectionType === 'imgload') {
-                    observer = observeImgLoad(el, config.fadeOutDuration);
-                } else {
-                    // hybrid
-                    observer = observeMutation(el, config.fadeOutDuration);
+                    // Also watch image loads inside slider containers
                     observeImgLoad(el, config.fadeOutDuration);
+                } else {
+                    observer = observeImgLoad(el, config.fadeOutDuration);
                 }
 
-                // Timeout fallback
+                // Timeout fallback — always remove skeleton
                 setTimeout(function () {
                     if (observer) {
                         observer.disconnect();
                     }
-
                     revealElement(el, config.fadeOutDuration);
                 }, config.timeout);
             });

@@ -54,8 +54,8 @@ class SkeletonConfig implements ArgumentInterface
             $borderRadius = $target['borderRadius'];
             $effect = $target['effect'];
 
-            // Base styles for the target element
-            $css .= $selector . '{position:relative;overflow:hidden;';
+            // All styles scoped to .rp-skeleton-active so they are removed cleanly
+            $css .= $selector . '.rp-skeleton-active{position:relative;overflow:hidden;';
 
             if ($target['aspectRatio'] !== null) {
                 $css .= 'aspect-ratio:' . $target['aspectRatio'] . ';';

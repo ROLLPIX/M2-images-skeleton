@@ -275,7 +275,7 @@
                 <group id="cms_block_images" translate="label comment" type="text" sortOrder="50"
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>CMS Block Images</label>
-                    <comment><![CDATA[CSS Selector: <strong>.widget img, .block-static-block img</strong>]]></comment>
+                    <comment><![CDATA[CSS Selector: <strong>.block-static-block .content, .widget.block-static-block</strong>]]></comment>
 
                     <field id="enabled" translate="label" type="select" sortOrder="10"
                            showInDefault="1" showInWebsite="1" showInStore="1">

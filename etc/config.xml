@@ -61,7 +61,7 @@
                 </category_image>
                 <cms_block_images>
                     <enabled>0</enabled>
-                    <selector>.widget img, .block-static-block img</selector>
+                    <selector>.block-static-block .content, .widget.block-static-block</selector>
                     <effect>shimmer</effect>
                     <height>auto</height>
                     <aspect_ratio></aspect_ratio>
